@@ -132,6 +132,23 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
+    NSMutableArray *cells = [[NSMutableArray alloc] init];
+    for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
+    {
+        for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:j]; ++i)
+        {
+            [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
+        }
+    }
+    
+    for (NSInteger k = 0; k < [cells count]; ++k)
+    {
+        CustomCell *cell = [cells objectAtIndex:k];
+        NSLog(cell.cellField.text);
+        [self.toDoListItems replaceObjectAtIndex:k withObject:cell.cellField.text];
+    }
+    
+    
     [self.tableView setEditing:NO animated:YES];
 }
 

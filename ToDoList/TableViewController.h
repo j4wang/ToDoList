@@ -18,6 +18,6 @@
 
 - (IBAction)addItem:(id)sender;
 - (IBAction)editList:(id)sender;
-- (IBAction)
+- (IBAction)finishEdit:(id)sender;
 
 @end
