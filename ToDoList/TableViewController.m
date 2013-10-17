@@ -132,6 +132,9 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
+    // ****** persist all items in the to do list
+    
+    // collect all cells
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
     {
@@ -141,6 +144,7 @@
         }
     }
     
+    // store cell values
     for (NSInteger k = 0; k < [cells count]; ++k)
     {
         CustomCell *cell = [cells objectAtIndex:k];
