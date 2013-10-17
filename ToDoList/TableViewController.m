@@ -42,7 +42,13 @@
     
     // set add button in nav bar
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
+    // set done button in nav bar
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
+    // set done button in nav bar
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editList:)];
+    
     self.navigationItem.rightBarButtonItem = addButton;
+    self.navigationItem.leftBarButtonItem = editButton;
     
     // set up tableView delegate and data source
     [self.tableView setDelegate:self];
@@ -102,19 +108,53 @@
     //[self.toDoListItems addObject:@""];
     [self.toDoListItems insertObject:@"" atIndex:0];
     [self.tableView setEditing:YES animated:YES];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
+    self.navigationItem.leftBarButtonItem = doneButton;
+
+    self.navigationItem.rightBarButtonItem = nil;
     [self.tableView reloadData];
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+- (IBAction)editList:(id)sender {
+    [self.tableView setEditing:YES animated:YES];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
+    self.navigationItem.leftBarButtonItem = doneButton;
+    
+}
+
+- (IBAction)finishEdit:(id)sender
+{
+    // set done button in nav bar
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editList:)];
+    self.navigationItem.leftBarButtonItem = editButton;
+    
+    // set add button in nav bar
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
+    self.navigationItem.rightBarButtonItem = addButton;
+    
+    [self.tableView setEditing:NO animated:YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
     NSLog(@"finished editing");
     [self.toDoListItems replaceObjectAtIndex:0 withObject:textField.text];
     
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
     NSLog(@"Should return");
     return NO;
+}
+
+#pragma mark - button utility methods
+- (void)addAddButtonAsRightNavButton:(id)sender
+{
+    // set add button in nav bar
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
+    self.navigationItem.rightBarButtonItem = addButton;
 }
 
 // Override to support conditional editing of the table view.
