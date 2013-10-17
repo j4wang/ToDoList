@@ -101,6 +101,7 @@
 - (IBAction)addItem:(id)sender {
     //[self.toDoListItems addObject:@""];
     [self.toDoListItems insertObject:@"" atIndex:0];
+    [self.tableView setEditing:YES animated:YES];
     [self.tableView reloadData];
 }
 
@@ -108,6 +109,12 @@
     NSLog(@"finished editing");
     [self.toDoListItems replaceObjectAtIndex:0 withObject:textField.text];
     
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    NSLog(@"Should return");
+    return NO;
 }
 
 // Override to support conditional editing of the table view.
