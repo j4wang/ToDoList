@@ -1,0 +1,12 @@
+
+*.xccheckout
+
+*.xcuserstate
+
+*.xcsettings
+
+ToDoList.xcworkspace/xcuserdata/John.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+
+ToDoList/.DS_Store
+
+.DS_Store
