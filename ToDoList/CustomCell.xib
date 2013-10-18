@@ -14,13 +14,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Event" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Nf-KK-uee">
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Event" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Nf-KK-uee">
                         <rect key="frame" x="6" y="7" width="242" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="2Nf-KK-uee" firstAttribute="leading" secondItem="l7C-vW-orZ" secondAttribute="leading" constant="6" id="T1Q-5s-7xX"/>
+                    <constraint firstItem="2Nf-KK-uee" firstAttribute="top" secondItem="l7C-vW-orZ" secondAttribute="top" constant="7" id="iac-QA-u2K"/>
+                    <constraint firstAttribute="trailing" secondItem="2Nf-KK-uee" secondAttribute="trailing" constant="72" id="onN-xB-AaE"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="cellField" destination="2Nf-KK-uee" id="ZcE-NA-wuy"/>
