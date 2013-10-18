@@ -23,7 +23,6 @@
 		52897B241809138D000BF9A0 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52897B231809138D000BF9A0 /* TableViewController.m */; };
 		52897B2718091BD8000BF9A0 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52897B2618091BD8000BF9A0 /* CustomCell.m */; };
 		52897B2918091C13000BF9A0 /* CustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52897B2818091C13000BF9A0 /* CustomCell.xib */; };
-		52897B2C180924C8000BF9A0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52897B2B180924C8000BF9A0 /* ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +58,6 @@
 		52897B2518091BD8000BF9A0 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCell.h; sourceTree = "<group>"; };
 		52897B2618091BD8000BF9A0 /* CustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCell.m; sourceTree = "<group>"; };
 		52897B2818091C13000BF9A0 /* CustomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCell.xib; sourceTree = "<group>"; };
-		52897B2A180924C8000BF9A0 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		52897B2B180924C8000BF9A0 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,8 +120,6 @@
 				52897AFC1809126B000BF9A0 /* AppDelegate.h */,
 				52897AFD1809126B000BF9A0 /* AppDelegate.m */,
 				52897AFF1809126B000BF9A0 /* Main.storyboard */,
-				52897B2A180924C8000BF9A0 /* ViewController.h */,
-				52897B2B180924C8000BF9A0 /* ViewController.m */,
 				52897B051809126B000BF9A0 /* Images.xcassets */,
 				52897AF41809126B000BF9A0 /* Supporting Files */,
 				52897B221809138D000BF9A0 /* TableViewController.h */,
@@ -267,7 +262,6 @@
 				52897AFA1809126B000BF9A0 /* main.m in Sources */,
 				52897B241809138D000BF9A0 /* TableViewController.m in Sources */,
 				52897B2718091BD8000BF9A0 /* CustomCell.m in Sources */,
-				52897B2C180924C8000BF9A0 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +470,7 @@
 				52897B1E1809126B000BF9A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		52897B1F1809126B000BF9A0 /* Build configuration list for PBXNativeTarget "ToDoListTests" */ = {
 			isa = XCConfigurationList;
@@ -484,6 +479,7 @@
 				52897B211809126B000BF9A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
