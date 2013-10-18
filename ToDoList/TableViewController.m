@@ -8,27 +8,32 @@
 
 #import "TableViewController.h"
 #import "CustomCell.h"
+#import <objc/runtime.h>
 
 @interface TableViewController ()
 
 @property (strong, nonatomic) UIBarButtonItem *addButton;
-@property (strong, nonatomic) UIBarButtonItem *doneButton;
 @property (strong, nonatomic) UIBarButtonItem *editButton;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic) BOOL addNewItem;
 
 @end
 
 @implementation TableViewController
 
+
 //override - lazy instantiation of mutable array
+/*
 -(NSMutableArray*) toDoListItems
 {
-    if (_toDoListItems == nil) {
-        _toDoListItems = [[NSMutableArray alloc] init];
+    
+    if (self.toDoListItems == nil) {
+        self.toDoListItems = [[NSMutableArray alloc] init];
     }
-    return _toDoListItems;
+    return self.toDoListItems;
 }
-
+*/
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -45,9 +50,7 @@
     
     // set add button in nav bar
     self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
-    // set done button in nav bar
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
-    // set done button in nav bar
+    // set edit button in nav bar
     self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editList:)];
     
     self.navigationItem.rightBarButtonItem = self.addButton;
@@ -61,10 +64,24 @@
     UINib *customNib = [UINib nibWithNibName:@"CustomCell" bundle:nil];
     [self.tableView registerNib:customNib forCellReuseIdentifier:@"CustomCell"];
     
-    // add initial data to be displayed
-    [self.toDoListItems addObject:@"Groceries"];
-    [self.toDoListItems addObject:@"Pick up at Airport"];
-    [self.toDoListItems addObject:@"Buy Movie Tickets"];
+    // add initial data to be displayed: load array from NSUserDefaults
+    NSUserDefaults *mySavedList = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *retArray = [[NSMutableArray alloc] initWithArray:((NSMutableArray *) [mySavedList objectForKey:@"myToDoList"])];
+    if(retArray != nil)
+    {
+        // object is in NSUserDefaults, get and set as value of to do list
+        self.toDoListItems = retArray;
+    }
+    // object doesn't exist, initialize array and save for key
+    else
+    {
+        self.toDoListItems = [[NSMutableArray alloc] init];
+        [mySavedList setObject:self.toDoListItems forKey:@"myToDoList"];
+    }
+
+    //[self.toDoListItems addObject:@"Groceries"];
+    //[self.toDoListItems addObject:@"Pick up at Airport"];
+    //[self.toDoListItems addObject:@"Buy Movie Tickets"];
     
     NSString *rowCount = [NSString stringWithFormat:@"Row count after load: %d", [self.toDoListItems count]];
     NSLog(rowCount);
@@ -104,76 +121,43 @@
     return cell;
 }
 
-#pragma mark - Utility methods
+#pragma mark - Utility methods (Selectors)
 
 // load blank cell
 - (IBAction)addItem:(id)sender {
+    NSLog(@"Add Item");
     //[self.toDoListItems addObject:@""];
     [self.toDoListItems insertObject:@"" atIndex:0];
+    
+    // disable buttons
+    self.addButton.enabled = NO;
+    self.editButton.enabled = NO;
+    
+    // set flag
+    self.addNewItem = YES;
+    
     [self.tableView setEditing:YES animated:YES];
-    /*
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
-    self.navigationItem.leftBarButtonItem = doneButton;
-    */
-    //self.navigationItem.rightBarButtonItem = nil;
+
     [self.tableView reloadData];
 }
 
 - (IBAction)editList:(id)sender {
+    self.editButton.enabled = false;
     [self.tableView setEditing:YES animated:YES];
-    /*
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit:)];
-    self.navigationItem.leftBarButtonItem = doneButton;
-    */
-}
 
-- (IBAction)finishEdit:(id)sender
-{
-    // set done button in nav bar
-    /*
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editList:)];
-    self.navigationItem.leftBarButtonItem = editButton;
-    
-    // set add button in nav bar
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    */
-    // ****** persist all items in the to do list
-    
-    // collect all cells
-    NSMutableArray *cells = [[NSMutableArray alloc] init];
-    for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
-    {
-        for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:j]; ++i)
-        {
-            [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
-        }
-    }
-    
-    // store cell values
-    for (NSInteger k = 0; k < [cells count]; ++k)
-    {
-        CustomCell *cell = [cells objectAtIndex:k];
-        NSLog(cell.cellField.text);
-        [self.toDoListItems replaceObjectAtIndex:k withObject:cell.cellField.text];
-    }
-    
-    
-    [self.tableView setEditing:NO animated:YES];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    NSLog(@"finished editing");
-    [self.toDoListItems replaceObjectAtIndex:0 withObject:textField.text];
-    
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    // update and persist
+    [self updateListFromTextField:textField];
     // exit editing mode
     [self.tableView  setEditing:NO animated:YES];
+    
+    // restore buttons
+    self.addButton.enabled = YES;
+    self.editButton.enabled = YES;
     
     NSLog(@"Should return - end editing");
     return NO;
@@ -187,8 +171,6 @@
     return YES;
 }
 
-
-
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -201,10 +183,12 @@
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        [self.toDoListItems insertObject:@"" atIndex:indexPath.row];
+        
+        [self.tableView reloadData];
+
     }
 }
-
-
 
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
@@ -213,8 +197,6 @@
     [self.toDoListItems removeObjectAtIndex:fromIndexPath.row];
     [self.toDoListItems insertObject:buffer atIndex:toIndexPath.row];
 }
-
-
 
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -230,17 +212,39 @@
     
 }
 
-
 - (void) setEditing:(BOOL)editing animated:(BOOL)animated{
     [super setEditing:editing animated:animated];
     
-    if(editing) {
-        self.addButton.enabled = NO;
-    }
-    else {
-        self.addButton.enabled = YES;
+    // reset the addNewItem flag
+    if(self.addNewItem)
+    {
+        self.addNewItem = NO;
     }
     
+    // manage the buttons
+    if(editing)
+    {
+        self.addButton.enabled = NO;
+        self.editButton.enabled = NO;
+    }
+    else
+    {
+        self.addButton.enabled = YES;
+        self.editButton.enabled = YES;
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)updateListFromTextField:(UITextField *)textField
+{
+    NSString *toDoListText = textField.text;
+    NSIndexPath *indexPath = objc_getAssociatedObject(self, (__bridge const void *)(textField));
+    
+    [self.toDoListItems setObject:toDoListText atIndexedSubscript:indexPath.row];
+    
+    //persist array into NSUserDefaults
+    [[NSUserDefaults standardUserDefaults] setObject:self.toDoListItems forKey:@"myToDoList"];
 }
 
 

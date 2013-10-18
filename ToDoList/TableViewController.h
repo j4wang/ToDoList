@@ -18,6 +18,5 @@
 
 - (IBAction)addItem:(id)sender;
 - (IBAction)editList:(id)sender;
-- (IBAction)finishEdit:(id)sender;
 
 @end
